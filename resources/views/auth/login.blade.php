@@ -25,7 +25,8 @@
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
-
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
@@ -48,20 +49,17 @@
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-              <div class="d-flex justify-content-center py-4">
-                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
-                  <span class="d-none d-lg-block">NiceAdmin</span>
-                </a>
-              </div><!-- End Logo -->
-
               <div class="card mb-3">
 
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                    <p class="text-center small">Enter your username & password to login</p>
+                  </div>
+                  <div class="mt-2 text-center">
+                    <div class="p-1" id="message-alert"></div>
+                    <div id="g_id_onload" data-client_id="{{env('GOOGLE_CLIENT_ID')}}" data-callback="onSignIn"></div>
+                    <div class="g_id_signin form-control" data-type="standard"></div>
                   </div>
 
                   <form class="row g-3 needs-validation" novalidate>
@@ -82,29 +80,16 @@
                     </div>
 
                     <div class="col-12">
-                      <div class="form-check">
-                        <input class="form-check-input" type="checkbox" name="remember" value="true" id="rememberMe">
-                        <label class="form-check-label" for="rememberMe">Remember me</label>
-                      </div>
-                    </div>
-                    <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
-                      <p class="small mb-0">Don't have account? <a href="pages-register.html">Create an account</a></p>
+                      <p class="small mb-0">Don't have account? <a href="{{ route('register') }}">Create an account</a></p>
                     </div>
                   </form>
 
                 </div>
               </div>
 
-              <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-              </div>
 
             </div>
           </div>
@@ -129,7 +114,59 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src = "https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        function decodeJwtResponse(token){
+            let base64url = token.split('.')[1];
+            let base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
+            let jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) { 
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+    
+        window.onSignIn = googleUser =>{
+            var user = decodeJwtResponse(googleUser.credential);
+            if(user){
+                $.ajaxSetup({
+                    headers: {  'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') }
+                });
+                $.ajax({
+                url: `/google/auth`,
+                method: 'POST',
+                data: {
+                    email: user.email,
+                    name: user.name,
+                    picture: user.picture
+                },
+                beforeSend: function(){
+                    $('#btnLogin').html("REDIRECTING...").prop("disabled", true);
+                },
+                success:function(response){
+                        switch (response.status) {
+                          case 200:
+                              window.location.href = '/home';
+                              break;
+                          case 500:
+                              $('#message-alert').html(' ');
+                              $('#message-alert').append(`
+                                  <div class="alert alert-danger" role="alert">
+                                      ${response.message}
+                                  </div>
+                              `);
+                              $('#btnLogin').html("Sign In").prop("disabled", false);
+                              break;
+                          default:
+                              break;
+                      }
+                  },
+                  error:function(xhr, status, error){
+                      alert(xhr.responseJSON.message);
+                  }
+                });
+            }
+        }
 
+    </script>
 </body>
-
 </html>
