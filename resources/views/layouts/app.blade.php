@@ -28,14 +28,6 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -44,7 +36,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="#" class="logo d-flex align-items-center">
         <span class="d-none d-lg-block">SIS</span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -99,6 +91,13 @@
       <li class="nav-heading">Pages</li>
 
       <li class="nav-item">
+        <a class="nav-link collapsed" href="{{ route('classesIndex') }}">
+          <i class="bi bi-card-list"></i>
+          <span>Classes</span>
+        </a>
+      </li><!-- End Register Page Nav -->
+
+      <li class="nav-item">
         <a class="nav-link collapsed" href="users-profile.html">
           <i class="bi bi-person"></i>
           <span>Profile</span>
@@ -112,19 +111,14 @@
         </a>
       </li><!-- End F.A.Q Page Nav -->
 
-      <li class="nav-item">
+    <li class="nav-item">
         <a class="nav-link collapsed" href="pages-contact.html">
           <i class="bi bi-envelope"></i>
           <span>Contact</span>
         </a>
       </li><!-- End Contact Page Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.html">
-          <i class="bi bi-card-list"></i>
-          <span>Register</span>
-        </a>
-      </li><!-- End Register Page Nav -->
+     
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-login.html">
