@@ -40,9 +40,24 @@ class StudentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $student = User::where('id', $request->id)->update([
+            'classess_id' => $request->class_id
+        ]);
+        
+        if($student) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'Student updated successfully',
+                'data' => $student
+            ]);
+        }
+        return response()->json([
+            'status' => 500,
+            'message' => 'Student update failed',
+            'data' => $student
+        ]);
     }
 
     /**

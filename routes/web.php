@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('classes/update', [ClassesController::class, 'update'])->name('classesUpdate');
 
     Route::get('/students/index', [StudentsController::class, 'index'])->name('studentsIndex');
+    Route::post('/students/class', [StudentsController::class, 'update'])->name('studentsClass');
 });
 
 Route::get('/temp', function () {

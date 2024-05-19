@@ -57,10 +57,21 @@
                         <td>{{ $item->email }}</td>
                         <td>{{ date('M, d, Y', strtotime($item->created_at)) }}</td>
                         <td>
-                           <select name="class" id="class" class="form-control">
-                                @foreach ($classes as $class)
-                                    <option value="{{ $class->id }}" {{ $item->class_id == $class->id ? 'selected' : '' }}>{{ $class->class_name }}</option>
-                                @endforeach
+                           <select name="class" id="assign_class" class="form-control" data-student_id="{{ $item->id }}">
+                                @if ($item->classess_id == null)
+                                    <option value="">No Assigned Class</option>
+                                    @if (!empty($classes))
+                                        @foreach ($classes as $class)
+                                            <option value="{{ $class->id }}">{{ $class->class_name }}</option>
+                                        @endforeach
+                                    @else
+                                        <option value="">No Class Added</option>
+                                    @endif
+                                @else
+                                    @foreach ($classes as $class)
+                                        <option value="{{ $class->id }}" {{ $item->classes_id == $class->id ? 'selected' : '' }}>{{ $class->class_name }}</option>
+                                    @endforeach
+                                @endif
                            </select>
                         </td>
                     </tr>
@@ -93,6 +104,27 @@
         var class_name = $(this).data('class_name');
         $('#class_id').val(id);
         $('#new_classname').val(class_name);
+    });
+
+    $(document).on('change', '#assign_class', function() {
+        var class_id = $(this).val();
+        var student_id = $(this).data('student_id');
+
+        console.log(class_id, student_id);
+        $.ajax({
+            url: `{{ route('studentsClass') }}`,
+            data : { 
+                id : student_id, 
+                class_id : class_id 
+            },
+            method: 'POST',
+            success: function(response) {
+                console.log(response);
+                if(response.status == 200) {
+                    location.reload();
+                }
+            }
+        });
     });
 </script>
 @endsection
