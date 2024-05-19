@@ -8,4 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class OneTimePassword extends Model
 {
     use HasFactory;
+    protected $fillable = ['email', 'otp'];
 }

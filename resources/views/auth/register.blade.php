@@ -58,7 +58,7 @@
                     <p class="text-center small">Enter your personal details to create account</p>
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate action="{{ route('register') }}" method="POST"> @csrf
+                  <form class="row g-3 needs-validation" novalidate action="{{ route('usersRegister') }}" method="POST"> @csrf
                     <div class="col-12">
                       <label for="yourName" class="form-label">Your Name</label>
                       <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
