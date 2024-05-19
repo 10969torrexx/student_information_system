@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>One Time Password</title>
+  <title>One Time Password - Verify</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -29,14 +29,6 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- Template Main CSS File -->
   <link href="/assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 </head>
 
 <body>
@@ -54,34 +46,29 @@
                 <div class="card-body">
 
                   <div class="pt-4 pb-2">
-                    <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
+                    <h5 class="card-title text-center pb-0 fs-4">One Time Password</h5>
                   </div>
-                  <div class="mt-2 text-center">
-                    <div class="p-1" id="message-alert"></div>
-                    <div id="g_id_onload" data-client_id="{{env('GOOGLE_CLIENT_ID')}}" data-callback="onSignIn"></div>
-                    <div class="g_id_signin form-control" data-type="standard"></div>
+                  <div class="mt-2 text-center" id="message">
+                   
                   </div>
 
-                  <form class="row g-3 needs-validation" novalidate action="{{ route('login') }}" method="POST"> @csrf
-
+                  <form class="row g-3 needs-validation" novalidate action="#" > @csrf
+                    <div class="mb-3">
+                        <p class="text-left text-wrap">We've sent an <strong>OTP (One Time Password)</strong> to <strong>{{ $email }}</strong>. Please enter the OTP to verify your email.
+                        Please check the spam folder if you don't find the email in your inbox.</p>
+                    </div>
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Email</label>
+                      <label for="yourUsername" class="form-label">One Time Password</label>
                       <div class="input-group has-validation">
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                        @error('email')
-                            <span class="invalid-feedback" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
+                        <input id="email_otp" type="text" class="form-control @error('email') is-invalid @enderror" name="email" id="email_otp" value="{{ old('email') }}" required autocomplete="email" autofocus>
                       </div>
                     </div>
 
                     <div class="col-12">
-                      <button class="btn btn-primary w-100" type="submit">Login</button>
+                      <button class="btn btn-primary w-100" id="submit_otp_button" type="button">Submit</button>
                     </div>
-                    <div class="col-12">
-                      <p class="small mb-0">Don't have account? <a href="{{ route('register') }}">Create an account</a></p>
-                    </div>
+
+
                   </form>
 
                 </div>
@@ -111,5 +98,40 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    $.ajaxSetup({
+        headers: {  'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') }
+    });
+    $(document).ready(function () {
+        $('#message').html(' ');
+        $("#submit_otp_button").click(function () {
+            var email_otp = $("#email_otp").val();
+            var email = "{{ $email }}";
+            console.log(email_otp);
+            $.ajax({
+                url: `{{ route('OtpVerify') }}`,
+                method: 'POST',
+                data: {
+                    email: email,
+                    otp: email_otp
+                },
+                success:function(response){
+                    console.log(response);
+                    if(response.status == 200) {
+                        window.location.href = '/home';
+                    }
+                    if (response.status == 500) {
+                        $('#message').html(`<div class="alert alert-danger" role="alert">${response.message}</div>`)
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    if (jqXHR.status === 429) {
+                        $('#message').html(`<div class="alert alert-danger" role="alert">You have exceeded the rate limit. Please wait a moment and try again.</div>`)
+                    }
+                }
+            });
+      });
+    });
+  </script>
 </body>
 </html>

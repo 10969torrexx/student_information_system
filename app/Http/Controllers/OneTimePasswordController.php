@@ -38,4 +38,37 @@ class OneTimePasswordController extends Controller
         }
         return view('onetimepassword.index', compact('email', 'otp'));
     }
+
+    public function verify(Request $request)  {
+        $request->validate([
+            'otp' => 'required|numeric'
+        ]);
+        $otp = $request->otp;
+        $email = $request->email;
+        $emailOtp = OneTimePassword::where('email', $email)->first();
+        if ($emailOtp->otp == $otp) {
+            $user = User::where('email', $email)->first();
+            if(!$user){
+                $user = User::create([
+                    'email' => $email,
+                    'name' => Session::get('userData')['name'],
+                    'picture' => !empty(Session::get('userData')['picture']) ? Session::get('userData')['picture'] : null,
+                    'role' => !empty(Session::get('userData')['role']) ? Session::get('userData')['role'] : 0,
+                    'password' => Hash::make(!empty(Session::get('userData')['password']) ? Session::get('userData')['password'] : 'ExampleString')
+                ]);
+            }
+            OneTimePassword::where('email', $email)->delete();
+            session()->flush();
+            Auth::login($user);
+            return response()->json([
+                'status' => 200, // 'error
+                'message' => 'OTP verified successfully'
+            ]);
+        } else {
+            return response()->json([
+                'status' => 500, // 'error
+                'message' => 'Invalid OTP'
+            ]);
+        }
+    }
 }

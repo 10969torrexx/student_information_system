@@ -5,6 +5,7 @@ use App\Http\Controllers\GoogleHandlerController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -18,6 +19,10 @@ Route::post('/google/auth', [GoogleHandlerController::class, 'store'])->name('go
 Route::get('onetimepassword/{email}', [OneTimePasswordController::class, 'index'])->name('otpIndex');
 Route::post('users/register', [UserController::class, 'register'])->name('usersRegister');
 
+Route::middleware(['throttle:5,1'])->group(function () {
+    Route::post('onetimepassword/verify', [OneTimePasswordController::class, 'verify'])->name('OtpVerify');
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/classes/index', [ClassesController::class, 'index'])->name('classesIndex');
