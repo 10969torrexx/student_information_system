@@ -27,12 +27,15 @@
   <link href="/assets/vendor/simple-datatables/style.css" rel="stylesheet">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
   <!-- Template Main CSS File -->
   <link href="/assets/css/style.css" rel="stylesheet">
 </head>
 
 <body>
+
+  
 
   <!-- ======= Header ======= -->
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -103,17 +106,18 @@
                 <span>Classes</span>
               </a>
             </li><!-- End Register Page Nav -->
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="users-profile.html">
+                <i class="bi bi-person"></i>
+                <span>Students</span>
+              </a>
+            </li><!-- End Profile Page Nav -->
               @break
           @default
               
       @endswitch
 
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="users-profile.html">
-          <i class="bi bi-person"></i>
-          <span>Profile</span>
-        </a>
-      </li><!-- End Profile Page Nav -->
+      
 
       <li class="nav-item">
         <a class="nav-link collapsed" href="pages-faq.html">
@@ -179,7 +183,11 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
+  <script>
+      $.ajaxSetup({
+        headers: {  'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') }
+    });
+  </script>
 </body>
 
 </html>

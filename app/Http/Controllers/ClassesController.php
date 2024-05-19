@@ -43,18 +43,29 @@ class ClassesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
-        //
+        $class = Classes::where('id', $request->id)->update([
+            'class_name' => $request->class_name,
+            'year_level' => $request->year_level
+        ]);
+        
+        if($class) {
+            return redirect()->route('classesIndex')->with('success', 'Class updated successfully');
+        }
+        return redirect()->route('classesIndex')->with('failed', 'Class updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $class = Classes::find($id);
-        $class->delete();
-        return redirect()->route('classesIndex')->with('success', 'Class deleted successfully');
+        $class = Classes::where('id', $request->id)->delete();
+        return response()->json([
+            'status' => 200,
+            'message' => 'Class deleted successfully',
+            'data' => $class
+        ]);
     }
 }
