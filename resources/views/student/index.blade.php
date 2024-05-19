@@ -69,7 +69,11 @@
                                     @endif
                                 @else
                                     @foreach ($classes as $class)
-                                        <option value="{{ $class->id }}" {{ $item->classes_id == $class->id ? 'selected' : '' }}>{{ $class->class_name }}</option>
+                                        @if ($class->id == $item->classess_id)
+                                            <option value="{{ $class->id }}" selected>{{ $class->class_name }}</option>
+                                        @else
+                                            <option value="{{ $class->id }}">{{ $class->class_name }}</option>
+                                        @endif
                                     @endforeach
                                 @endif
                            </select>
