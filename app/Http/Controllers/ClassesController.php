@@ -15,7 +15,8 @@ class ClassesController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $classes = Classes::all();
+        return view('classes.index', compact('classes'));
     }
 
     /**
@@ -23,7 +24,12 @@ class ClassesController extends Controller
      */
     public function store(Request $request)
     {
-       
+        $class = Classes::create([
+            'class_name' => $request->class_name,
+            'year_level' => $request->year_level
+        ]);
+        
+        return redirect()->route('classesIndex')->with('success', 'Class created successfully');
     }
 
     /**
@@ -45,8 +51,10 @@ class ClassesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $class = Classes::find($id);
+        $class->delete();
+        return redirect()->route('classesIndex')->with('success', 'Class deleted successfully');
     }
 }
