@@ -6,6 +6,7 @@ use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\OneTimePasswordController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\StudentsController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -30,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('classes/destroy', [ClassesController::class, 'destroy'])->name('classesDestroy');
     Route::post('classes/update', [ClassesController::class, 'update'])->name('classesUpdate');
 
+    Route::get('/students/index', [StudentsController::class, 'index'])->name('studentsIndex');
 });
 
 Route::get('/temp', function () {

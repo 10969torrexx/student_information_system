@@ -47,13 +47,6 @@
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
 
-    <div class="search-bar">
-      <form class="search-form d-flex align-items-center" method="POST" action="#">
-        <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-        <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-      </form>
-    </div><!-- End Search Bar -->
-
     <nav class="header-nav ms-auto">
       <ul class="d-flex align-items-center">
         <li class="nav-item dropdown pe-3">
@@ -97,7 +90,12 @@
 
       @switch(Auth::user()->role)
           @case(0)
-              
+            <li class="nav-item">
+              <a class="nav-link collapsed" href="#">
+                <i class="bi bi-card-list"></i>
+                <span>My Class</span>
+              </a>
+            </li>
               @break
           @case(1)
             <li class="nav-item">
@@ -105,57 +103,17 @@
                 <i class="bi bi-card-list"></i>
                 <span>Classes</span>
               </a>
-            </li><!-- End Register Page Nav -->
+            </li>
             <li class="nav-item">
-              <a class="nav-link collapsed" href="users-profile.html">
+              <a class="nav-link collapsed" href="{{ route('studentsIndex') }}">
                 <i class="bi bi-person"></i>
                 <span>Students</span>
               </a>
-            </li><!-- End Profile Page Nav -->
+            </li>
               @break
           @default
               
       @endswitch
-
-      
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-faq.html">
-          <i class="bi bi-question-circle"></i>
-          <span>F.A.Q</span>
-        </a>
-      </li><!-- End F.A.Q Page Nav -->
-
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-contact.html">
-          <i class="bi bi-envelope"></i>
-          <span>Contact</span>
-        </a>
-      </li><!-- End Contact Page Nav -->
-
-     
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
-          <i class="bi bi-box-arrow-in-right"></i>
-          <span>Login</span>
-        </a>
-      </li><!-- End Login Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-error-404.html">
-          <i class="bi bi-dash-circle"></i>
-          <span>Error 404</span>
-        </a>
-      </li><!-- End Error 404 Page Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link " href="pages-blank.html">
-          <i class="bi bi-file-earmark"></i>
-          <span>Blank</span>
-        </a>
-      </li><!-- End Blank Page Nav -->
-
     </ul>
 
   </aside><!-- End Sidebar-->
@@ -182,7 +140,7 @@
   <script src="/assets/vendor/php-email-form/validate.js"></script>
 
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js"></script>
+  <script src="/assets/js/main.js"></script>
   <script>
       $.ajaxSetup({
         headers: {  'X-CSRF-TOKEN' : $('meta[name="csrf-token"]').attr('content') }
