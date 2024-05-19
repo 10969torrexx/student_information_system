@@ -91,7 +91,7 @@
       @switch(Auth::user()->role)
           @case(0)
             <li class="nav-item">
-              <a class="nav-link collapsed" href="#">
+              <a class="nav-link collapsed" href="{{ route('myClass') }}">
                 <i class="bi bi-card-list"></i>
                 <span>My Class</span>
               </a>

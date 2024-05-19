@@ -19,6 +19,14 @@ class ClassesController extends Controller
         return view('classes.index', compact('classes'));
     }
 
+    public function myClass()
+    {
+        $user = User::join('classes', 'users.classess_id', '=', 'classes.id')
+            ->where('users.id', Auth::user()->id)->first();
+        // dd( $user->toArray());
+        return view('classes.myclass', compact('user'));
+    }
+
     /**
      * Store a newly created resource in storage.
      */
