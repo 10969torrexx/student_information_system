@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleHandlerController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\OneTimePasswordController;
+use App\Http\Controllers\UserController;
+
 Route::get('/', function () {
     return view('auth.login');
 });
@@ -13,6 +15,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::post('/google/auth', [GoogleHandlerController::class, 'store'])->name('googleHandle');
+Route::get('onetimepassword/{email}', [OneTimePasswordController::class, 'index'])->name('otpIndex');
+Route::post('users/register', [UserController::class, 'register'])->name('usersRegister');
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/classes/index', [ClassesController::class, 'index'])->name('classesIndex');
